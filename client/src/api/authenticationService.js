@@ -21,7 +21,7 @@ export const userLogin=(authRequest)=>{
     })
 }
 
-export const fetchUserData=(authRequest)=>{
+export const fetchUserData=()=>{
     return axios({
         method:'GET',
         url:`${process.env.hostUrl||'http://localhost:8080'}/dashboard/view`,

@@ -1,8 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from 'react';
-import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 import { userRegister } from '../api/authenticationService';
-import { authenticate, authFailure, authSuccess } from '../redux/authActions';
 import './../App.css';
 
 const RegisterPage = ({ loading, error, ...props }) => {
@@ -67,8 +66,8 @@ const RegisterPage = ({ loading, error, ...props }) => {
                 <p className="hint-text">Create your account. It's free and only takes a minute.</p>
                 <div className="form-group">
                     <div className="row">
-                        <div className="col"><input type="text" value={values.firstName} onChange={handleChange} class="form-control" name="firstName" placeholder="First Name" required="required" /></div>
-                        <div className="col"><input type="text" value={values.lastName} onChange={handleChange} class="form-control" name="lastName" placeholder="Last Name" required="required" /></div>
+                        <div className="col"><input type="text" value={values.firstName} onChange={handleChange} className="form-control" name="firstName" placeholder="First Name" required="required" /></div>
+                        <div className="col"><input type="text" value={values.lastName} onChange={handleChange} className="form-control" name="lastName" placeholder="Last Name" required="required" /></div>
                     </div>
                 </div>
                 <div className="form-group">
@@ -90,7 +89,7 @@ const RegisterPage = ({ loading, error, ...props }) => {
                     <button type="submit" className="btn btn-success btn-lg btn-block">Register Now</button>
                 </div>
             </form>
-            <div className="text-center">Already have an account? <a href="/">Sign in</a></div>
+            <div className="text-center">Already have an account?  <Link to="/">Sign in</Link></div>
         </div>
 
     );
@@ -98,23 +97,7 @@ const RegisterPage = ({ loading, error, ...props }) => {
 
 }
 
-const mapStateToProps=({auth})=>{
-    console.log("state ",auth)
-    return {
-        loading:auth.loading,
-        error:auth.error
-}}
 
 
-const mapDispatchToProps=(dispatch)=>{
-
-    return {
-        authenticate :()=> dispatch(authenticate()),
-        setUser:(data)=> dispatch(authSuccess(data)),
-        loginFailure:(message)=>dispatch(authFailure(message))
-    }
-}
-
-
-export default connect(mapStateToProps,mapDispatchToProps)(RegisterPage);
+export default RegisterPage;
 
