@@ -125,3 +125,13 @@ body {
 .signup-form form a:hover {
 	text-decoration: underline;
 }
+
+.text-error {
+	color: #b85c5c;
+	text-decoration: none;
+}
+
+.text-success {
+	color: #b85c5c;
+	text-decoration: none;
+}
