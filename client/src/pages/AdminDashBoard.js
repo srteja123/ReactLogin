@@ -24,6 +24,7 @@ const navigate=useNavigate();
 
     const [page, setPage] = useState(0);
     const [filterData, setFilterData] = useState();
+    const [disableIcons, setDisableIcons] = useState(false);
     const [isAddingUser, setIsAddingUser] = useState(false);
     const [isEditingUser, setIsEditingUser] = useState(false);
     const [errorResponse, setErrorResponse] = useState({
@@ -65,11 +66,13 @@ const exportToExcel = () => {
 const handleAddUser = () => {
     setIsAddingUser(true);
     setIsEditingUser(false);
+    setDisableIcons(true);
 };
 
 const handleSaveUser = (userData) => {
     userRegister(userData).then((response) => {
         if (response.status === 200) {
+            setDisableIcons(false);
             window.location.reload();
         }
         else {
@@ -89,6 +92,7 @@ const handleUpdateUser = (userData) => {
     updateUser(userData).then((response) => {
         if (response.status === 200) {
             window.location.reload();
+            setDisableIcons(false);
         }
         else {
             setErrorResponse({error: true, message :response.message});
@@ -107,6 +111,7 @@ const handleUpdateUser = (userData) => {
 const handleCancelAddUser = () => {
     setIsAddingUser(false);
     setIsEditingUser(false);
+    setDisableIcons(false);
 };
 const editUserData = (userId) => {
     const editUser=data.filter((item) => item.userId === userId)
@@ -116,6 +121,7 @@ const editUserData = (userId) => {
             );
     }
     setIsEditingUser(true);
+    setDisableIcons(true);
     };
 const handleDeleteUser = (userId) => {
     const userData = {
@@ -185,8 +191,8 @@ const handleDeleteUser = (userId) => {
                                     <td>{user.userType}</td>
                                     <td><span className="status text-success">&bull;</span> {user.accountStatus}</td>
                                     <td>
-                                        <a href="#" className="settings" data-testid={user.userId} id={user.userId} title="Edit" data-toggle="tooltip" onClick={() => editUserData(user.userId)}><i className="material-icons">&#xE254;</i></a>
-                                        <a href="#" className="delete" data-testid={user.userId} id={user.userId} title="Delete" data-toggle="tooltip" onClick={() => handleDeleteUser(user.userId)}><i className="material-icons">&#xE5C9;</i></a>
+                                      { !disableIcons && <a href="#" className="settings" data-testid={user.userId} id={user.userId} title="Edit" data-toggle="tooltip" onClick={() => editUserData(user.userId)}><i className="material-icons">&#xE254;</i></a>}
+                                      { !disableIcons && <a href="#" className="delete" data-testid={user.userId} id={user.userId} title="Delete" data-toggle="tooltip" onClick={() => handleDeleteUser(user.userId)}><i className="material-icons">&#xE5C9;</i></a>}
                                     </td>
                                 </tr>
                             ))}
