@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import validator from 'validator';
 import AddUserModal from '../pages/AddUser';
 
 jest.mock('validator', () => ({
@@ -41,10 +42,11 @@ describe('AddUserModal component', () => {
     fireEvent.click(cancelButton);
 
   });
-  it('renders Add User form and Add',async () => {
+  it('renders Add User form and Add', () => {
     const onSaveMock = jest.fn();
     const onCancelMock = jest.fn();
-
+  
+    validator.isEmail.mockReturnValue(true);
     const { getByPlaceholderText,getByText } = render(
       <AddUserModal onSave={onSaveMock} onCancel={onCancelMock}  />
     );
@@ -59,9 +61,9 @@ describe('AddUserModal component', () => {
     
 
     const submitButton = getByText('Add');
-    fireEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(onSaveMock).toHaveBeenCalledTimes(1);
       expect(onSaveMock).toHaveBeenCalledWith({
         emailId: 'test@example.com',
@@ -94,9 +96,12 @@ describe('AddUserModal component', () => {
     
 
     const submitButton = getByText('Add');
-    fireEvent.click(submitButton);
-    expect(screen.getByText("Please enter a valid last name")).toBeInTheDocument();
-    expect(screen.getByText("Please enter a valid first name")).toBeInTheDocument();
+    fireEvent.submit(submitButton);
+   
+    await waitFor(() => {
+      expect(screen.getByText("Please enter a valid last name")).toBeInTheDocument();
+      expect(screen.getByText("Please enter a valid first name")).toBeInTheDocument();
+    });
 
 
   });
@@ -114,13 +119,16 @@ describe('AddUserModal component', () => {
     
 
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
+    fireEvent.change(lastNameInput, { target: { value: "Jonn"} });
     fireEvent.change(lastNameInput, { target: { value: ""} });
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     
 
     const submitButton = getByText('Add');
-    fireEvent.click(submitButton);
-    expect(screen.getByText("Please enter a valid last name")).toBeInTheDocument();
+    fireEvent.submit(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText("Please enter a valid last name")).toBeInTheDocument();
+    });
 
 
   });
@@ -138,12 +146,14 @@ describe('AddUserModal component', () => {
 
     fireEvent.change(firstNameInput, { target: { value: "John" } });
     fireEvent.change(lastNameInput, { target: { value: "Doe"} });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(emailInput, { target: { value: '' } });
-    
 
     const submitButton = getByText('Add');
-    fireEvent.click(submitButton);
-    expect(screen.getByText("Please enter a valid email format")).toBeInTheDocument();
+    fireEvent.submit(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText("Please enter a valid email format")).toBeInTheDocument();
+    });
 
 
   });
