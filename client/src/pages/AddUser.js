@@ -15,19 +15,19 @@ const AddUserModal = ({ onSave, onCancel, userData: initialUserData, onUpdate })
     createdTime:''
   });
   const [errorEmail, setEmailError] = useState({
-    error: true,
-    success: false
+    error: false,
+    success: true
   });
   const [firstNameValue, setFirstName] = useState('');
   const [lastNameValue, setLastName] = useState('');
   const [emailValue, setEmail] = useState('');
   const [errorFirstName, setFirstNameError] = useState({
-    error: true,
-    success: false
+    error: false,
+    success: true
 });
 const [errorLastName, setLastNameError] = useState({
-    error: true,
-    success: false
+    error: false,
+    success: true
 });
   const handleInputChange = (e) => {
     e.persist();
@@ -62,12 +62,19 @@ const [errorLastName, setLastNameError] = useState({
       }
   }
 
+  if (e.target.name === 'accountStatus') {
+    if (e.target.checked) {
+      userData.accountStatus=e.target.value;
+    }
+}
+
   };
 
   const handleSaveOrUpdate = () => {
   if (initialUserData) {
     //For editing existing user
     onUpdate(userData);
+  
   }else{
     //For new user
   if(firstNameValue === ''){
@@ -79,6 +86,9 @@ const [errorLastName, setLastNameError] = useState({
   }else{
     userData.password = userData.emailId;
     onSave(userData);
+    setEmailError({ error: false, success: true });
+    setLastNameError({ error: false, success: true });
+    setFirstNameError({ error: false, success: true });
   }
   }
 
@@ -125,7 +135,8 @@ const [errorLastName, setLastNameError] = useState({
           </div>
           <div className="modal-footer">
             <input type="button" className="btn btn-default" data-dismiss="modal" onClick={onCancel} value="Cancel" />
-            <input type="button" className="btn btn-success" value={initialUserData ? 'Update' : 'Add'} onClick={handleSaveOrUpdate} />
+            <input type="button" className="btn btn-success" value={initialUserData ? 'Update' : 'Add'}
+            onClick= {(errorEmail.error || errorFirstName.error ||errorLastName.error )? null: handleSaveOrUpdate} />
           </div>
           <p className="text-error">{errorEmail.error ? "Please enter a valid email format" : null}</p>
           <p className="text-error">{errorFirstName.error ? "Please enter a valid first name" : null}</p>
