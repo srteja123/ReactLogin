@@ -10,18 +10,22 @@ const MainWrapper=styled.div`
     padding-top:40px;
 `;
 
-const Dashboard=(props)=>{
+const Dashboard=()=>{
   const navigate=useNavigate();
     const [data,setData]=useState({});
-    console.log("enter");
     React.useEffect(()=>{
-        fetchUserData().then((response)=>{
-            setData(response.data);
-        }).catch((e)=>{
-            localStorage.clear();
+   //if some one is trying to access /dashboard without token redirect them to login page
+        if(localStorage.getItem('USER_KEY') == null){
             navigate('/');
-        })
-    },[])
+        }else{
+            fetchUserData().then((response)=>{
+                setData(response.data);
+            }).catch((e)=>{
+                localStorage.clear();
+                navigate('/');
+            })
+        }
+    },[navigate])
 
     const logOut=()=>{
 
@@ -33,7 +37,8 @@ const Dashboard=(props)=>{
     return (
         <Container>
             <MainWrapper>
-                <h4>Hello {data && `${data.email} ${data.loginCounter}`}</h4>
+                <h4 data-testid="display-text">Hello {data && `${data.email}` }</h4>
+                <h4>Login Counter : {data && `${data.loginCounter}`}</h4>
 
                 <Button style={{marginTop:'5px'}} onClick={() =>logOut()}>Logout</Button>
             </MainWrapper>
