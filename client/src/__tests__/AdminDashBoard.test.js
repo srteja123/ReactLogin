@@ -22,8 +22,6 @@ describe('AdminDashboard component', () => {
       });
 
   it('renders Admin Dashboard and handles user interactions', async () => {
-    //const mockSetData = jest.fn();
-    //React.useState.mockReturnValueOnce([[], mockSetData]); // Provide your initial state or default value for the 'data' state variable
 
     const mockData =
       {
@@ -200,7 +198,8 @@ describe('AdminDashboard component', () => {
     // Simulate clicking the 'Add New User' link
     const addUserButton = getByTestId('AddUser');
     fireEvent.click(addUserButton);
-
+    const cancelButton = getByText('Cancel');
+    fireEvent.click(cancelButton);
     // Validate if the 'AddUserModal' component is rendered after clicking the 'Add New User' link
     
     // Simulate clicking the 'Export to Excel' link
